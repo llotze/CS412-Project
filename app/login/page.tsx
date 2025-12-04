@@ -22,10 +22,12 @@ export default function Login() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     })
-    if (res.ok) {
+    const data = await res.json()
+    if (res.ok && data.access) {
+      localStorage.setItem("access", data.access) // Save JWT token
       router.push("/")
     } else {
-      setError("Invalid username or password.")
+      setError(data.detail || "Invalid username or password.")
     }
   }
 
