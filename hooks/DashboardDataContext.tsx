@@ -1,6 +1,6 @@
 // file: project/hooks/DashboardDataContext.tsx
 // Author: Lucas Lotze (llotze@bu.edu), 12/06/2025
-// Description: Context provider for dashboard data.
+// Description: Context provider for dashboard data (accounts, categories, goals, transactions).
 
 "use client"
 import { createContext, useContext, useEffect, useState } from "react"
@@ -17,6 +17,12 @@ type DashboardDataContextType = {
 
 const DashboardDataContext = createContext<DashboardDataContextType | undefined>(undefined)
 
+/**
+ * DashboardDataProvider
+ * Provide shared dashboard state and a fetchAll() helper to reload data from the API.
+ * - Automatically fetches once on mount.
+ * - Consumers call fetchAll() after mutations (add/edit/delete).
+ */
 export function DashboardDataProvider({ children }: { children: React.ReactNode }) {
   const [accounts, setAccounts] = useState<Account[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -24,8 +30,13 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const router = useRouter()
 
+  /**
+   * fetchAll
+   * Fetch arrays from API endpoints and update local state.
+   * If no token or 401 returned, redirect to login.
+   */
   function fetchAll() {
-    const token = localStorage.getItem("access");
+    const token = localStorage.getItem("access")
     if (!token) {
       router.push("/login")
       return
@@ -33,7 +44,7 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     const headers: HeadersInit = {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
-    };
+    }
 
     function fetchArray(url: string, setter: (data: any[]) => void) {
       fetch(url, { headers })
@@ -57,6 +68,21 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     fetchAll()
+    /**
+     * Listen for cross-tab 'storage' and same-tab 'login' events so provider
+     * refreshes immediately when user logs in/out.
+     */
+    const onStorage = () => {
+      if (localStorage.getItem("access")) fetchAll()
+    }
+    const onLogin = () => fetchAll()
+
+    window.addEventListener("storage", onStorage)
+    window.addEventListener("login", onLogin)
+    return () => {
+      window.removeEventListener("storage", onStorage)
+      window.removeEventListener("login", onLogin)
+    }
     // eslint-disable-next-line
   }, [])
 
@@ -69,6 +95,10 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   )
 }
 
+/**
+ * useDashboardData
+ * Hook to consume dashboard context. Throws if used outside provider.
+ */
 export function useDashboardData() {
   const ctx = useContext(DashboardDataContext)
   if (!ctx) throw new Error("useDashboardData must be used within DashboardDataProvider")

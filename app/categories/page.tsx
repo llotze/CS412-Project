@@ -12,6 +12,11 @@ import { EditCategoryModal } from "@/components/EditCategoryModal"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
 
+/**
+ * CategoriesPage
+ * - Lists categories with edit/delete actions.
+ * - Edits open a modal that PATCHes the title; delete uses DeleteConfirm.
+ */
 export default function CategoriesPage() {
   const { categories, fetchAll } = useDashboardData()
   const [editing, setEditing] = useState<any>(null)

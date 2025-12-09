@@ -10,6 +10,11 @@ import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Account, Category } from "../types"
 
+/**
+ * EditTransactionModal
+ * Populate form from `transaction` prop and PATCH on submit.
+ * Calls onSuccess() to refresh shared data on success.
+ */
 export function EditTransactionModal({
   open,
   onOpenChange,

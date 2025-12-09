@@ -6,6 +6,11 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 
+
+/**
+ * DeleteConfirm
+ * Reusable centered confirmation sheet. onConfirm() runs when Delete is pressed.
+ */
 export function DeleteConfirm({
   open,
   onOpenChange,

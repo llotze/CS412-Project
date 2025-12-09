@@ -8,6 +8,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 
+/**
+ * AddCategoryModal
+ * Simple title form; on success calls onSuccess() to refresh data.
+ */
 export function AddCategoryModal({ open, onOpenChange, onSuccess }: {
   open: boolean,
   onOpenChange: (v: boolean) => void,

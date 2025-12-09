@@ -9,6 +9,11 @@ import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Category } from "../types"
 
+
+/**
+ * AddGoalModal
+ * Form to create a goal. Requires category, budget_amount, target_amount, deadline.
+ */
 export function AddGoalModal({ open, onOpenChange, categories, onSuccess }: {
   open: boolean,
   onOpenChange: (v: boolean) => void,

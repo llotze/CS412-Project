@@ -1,12 +1,17 @@
 // file: project/components/ClientNav.tsx
 // Author: Lucas Lotze (llotze@bu.edu), 12/09/2025
-// Description: Component for navigation.
+// Description: Client-only nav; shows links when logged in and handles logout.
 
 "use client"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 
+/**
+ * ClientNav
+ * Render navigation when token exists in localStorage.
+ * Listens for 'storage', 'login', and 'logout' events to update immediately.
+ */
 export function ClientNav() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -14,9 +19,9 @@ export function ClientNav() {
     const check = () => setIsLoggedIn(!!localStorage.getItem("access"))
     check()
 
-    const onStorage = () => check() 
-    const onLogin = () => setIsLoggedIn(true) 
-    const onLogout = () => setIsLoggedIn(false) 
+    const onStorage = () => check()
+    const onLogin = () => setIsLoggedIn(true)
+    const onLogout = () => setIsLoggedIn(false)
 
     window.addEventListener("storage", onStorage)
     window.addEventListener("login", onLogin)
@@ -42,6 +47,7 @@ export function ClientNav() {
       <Button
         variant="outline"
         onClick={() => {
+          // clear token, notify other listeners, and send user to login
           localStorage.removeItem("access")
           window.dispatchEvent(new Event("logout"))
           window.location.href = "/login"

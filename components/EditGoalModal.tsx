@@ -10,6 +10,10 @@ import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Category } from "../types"
 
+/**
+ * EditGoalModal
+ * Edit form for an existing goal. PATCHes to detail endpoint on submit.
+ */
 export function EditGoalModal({
   open,
   onOpenChange,

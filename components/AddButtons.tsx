@@ -1,7 +1,6 @@
 // file: project/components/AddButtons.tsx
 // Author: Lucas Lotze (llotze@bu.edu), 12/06/2025
-// Description: Component for adding buttons to add new items.
-
+// Description: Buttons to open add-modals; refreshes shared data after success.
 "use client"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -11,6 +10,10 @@ import { AddGoalModal } from "@/components/AddGoalModal"
 import { AddAccountModal } from "@/components/AddAccountModal"
 import { useDashboardData } from "@/hooks/DashboardDataContext"
 
+/**
+ * AddButtons
+ * Small control panel exposing add modals. Calls fetchAll() from context on success.
+ */
 export function AddButtons() {
   const [showTransactionModal, setShowTransactionModal] = useState(false)
   const [showCategoryModal, setShowCategoryModal] = useState(false)
@@ -20,6 +23,7 @@ export function AddButtons() {
   const { categories, accounts, fetchAll } = useDashboardData()
 
   const handleSuccess = () => {
+    // refresh shared state immediately
     fetchAll()
   }
 

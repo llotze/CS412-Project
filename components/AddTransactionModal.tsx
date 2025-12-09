@@ -13,10 +13,14 @@ type AddTransactionModalProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   categories: Category[]
-  accounts: Account[] 
+  accounts: Account[]
   onSuccess: () => void
 }
 
+/**
+ * AddTransactionModal
+ * Presents a form to create a transaction. Calls onSuccess() on success.
+ */
 export function AddTransactionModal({
   open,
   onOpenChange,

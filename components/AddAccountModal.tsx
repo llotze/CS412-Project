@@ -21,6 +21,10 @@ const ACCOUNT_TYPES = [
   { value: "other", label: "Other" },
 ]
 
+/**
+ * AddAccountModal
+ * Simple form to create an account object. Calls onSuccess() after creation.
+ */
 export function AddAccountModal({ open, onOpenChange, onSuccess }: {
   open: boolean,
   onOpenChange: (open: boolean) => void,

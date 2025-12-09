@@ -11,11 +11,22 @@ import { AddButtons } from "@/components/AddButtons"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
 
+/**
+ * AccountsPage
+ * - Lists accounts with type.
+ * - Allows deleting an account (Edit removed intentionally).
+ * - Calls fetchAll() after delete to refresh shared state.
+ */
 export default function AccountsPage() {
   const { accounts, fetchAll } = useDashboardData()
   const [deleting, setDeleting] = useState<any>(null)
   const [deletingOpen, setDeletingOpen] = useState(false)
 
+  /**
+   * handleDelete
+   * - Sends DELETE to account detail endpoint.
+   * - On success, triggers fetchAll to refresh context state.
+   */
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access")
     if (!token) return
@@ -23,6 +34,7 @@ export default function AccountsPage() {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${token}` }
     })
+    // refresh the provider data
     fetchAll()
   }
 
@@ -50,6 +62,7 @@ export default function AccountsPage() {
                   <td className="py-1 px-2 text-sm">{acc.type}</td>
                   <td className="py-1 px-2 text-sm text-right">
                     <div className="inline-flex gap-2">
+                      {/* Delete only — modern neutral styles applied */}
                       <Button className="bg-rose-600 text-white hover:bg-rose-700" onClick={() => { setDeleting(acc); setDeletingOpen(true) }}>
                         Delete
                       </Button>
@@ -62,6 +75,7 @@ export default function AccountsPage() {
         </Table>
       </Card>
 
+      {/* Reusable centered confirmation modal */}
       <DeleteConfirm
         open={deletingOpen}
         onOpenChange={setDeletingOpen}

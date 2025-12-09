@@ -9,6 +9,10 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 
+/**
+ * EditCategoryModal
+ * Small edit form for a category title; PATCH to API on submit.
+ */
 export function EditCategoryModal({
   open,
   onOpenChange,

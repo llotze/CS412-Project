@@ -1,7 +1,6 @@
 // file: project/app/transactions/page.tsx
 // Author: Lucas Lotze (llotze@bu.edu), 12/04/2025
 // Description: Screen for displaying the list of transactions.
-
 "use client"
 import { useState } from "react"
 import { Card } from "@/components/ui/card"
@@ -13,6 +12,10 @@ import { EditTransactionModal } from "@/components/EditTransactionModal"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
 
+/**
+ * TransactionsPage
+ * Show recent transactions, allow edit/delete via modals.
+ */
 export default function TransactionsPage() {
   const { transactions, categories, accounts, fetchAll } = useDashboardData()
   const [editing, setEditing] = useState<any>(null)
@@ -20,21 +23,18 @@ export default function TransactionsPage() {
   const [deleting, setDeleting] = useState<any>(null)
   const [deletingOpen, setDeletingOpen] = useState(false)
 
-  // Get account name by id
+  // compact account display: name + small pill with type
   function getAccountName(id: number | string) {
     const acc = accounts.find(a => a.id === id)
     if (!acc) return id
     return (
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium leading-none">{acc.name}</span>
-        <span className="text-xs text-muted-foreground bg-muted/40 px-2 py-0.5 rounded-full leading-none">
-          {acc.type}
-        </span>
+        <span className="text-xs text-muted-foreground bg-muted/40 px-2 py-0.5 rounded-full leading-none">{acc.type}</span>
       </div>
     )
   }
 
-  // Sort transactions by date descending
   const sortedTransactions = transactions.slice().sort((a, b) => {
     if (!a.date) return 1
     if (!b.date) return -1
@@ -43,10 +43,7 @@ export default function TransactionsPage() {
 
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access"); if (!token) return
-    await fetch(`http://127.0.0.1:8000/project/api/transaction/${id}/`, {
-      method: "DELETE",
-      headers: { "Authorization": `Bearer ${token}` }
-    })
+    await fetch(`http://127.0.0.1:8000/project/api/transaction/${id}/`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } })
     fetchAll()
   }
 
@@ -67,9 +64,7 @@ export default function TransactionsPage() {
           </thead>
           <tbody>
             {sortedTransactions.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="text-center py-2 text-muted-foreground">No transactions found.</td>
-              </tr>
+              <tr><td colSpan={6} className="text-center py-2 text-muted-foreground">No transactions found.</td></tr>
             ) : (
               sortedTransactions.map(tx => (
                 <tr key={tx.id} className="border-b last:border-b-0">
@@ -80,12 +75,8 @@ export default function TransactionsPage() {
                   <td className="py-1 px-2 text-sm">{tx.description}</td>
                   <td className="py-1 px-2 text-sm text-right">
                     <div className="inline-flex gap-2">
-                      <Button className="bg-slate-100 text-slate-800 hover:bg-slate-200" onClick={() => { setEditing(tx); setEditingOpen(true) }}>
-                        Edit
-                      </Button>
-                      <Button className="bg-rose-600 text-white hover:bg-rose-700" onClick={() => { setDeleting(tx); setDeletingOpen(true) }}>
-                        Delete
-                      </Button>
+                      <Button className="bg-slate-100 text-slate-800 hover:bg-slate-200" onClick={() => { setEditing(tx); setEditingOpen(true) }}>Edit</Button>
+                      <Button className="bg-rose-600 text-white hover:bg-rose-700" onClick={() => { setDeleting(tx); setDeletingOpen(true) }}>Delete</Button>
                     </div>
                   </td>
                 </tr>
@@ -95,21 +86,8 @@ export default function TransactionsPage() {
         </Table>
       </Card>
 
-      <EditTransactionModal
-        open={editingOpen}
-        onOpenChange={setEditingOpen}
-        transaction={editing}
-        categories={categories}
-        accounts={accounts}
-        onSuccess={fetchAll}
-      />
-      <DeleteConfirm
-        open={deletingOpen}
-        onOpenChange={setDeletingOpen}
-        title="Delete Transaction"
-        message={`Delete transaction "${deleting?.description ?? deleting?.id}"?`}
-        onConfirm={() => deleting && handleDelete(deleting.id)}
-      />
+      <EditTransactionModal open={editingOpen} onOpenChange={setEditingOpen} transaction={editing} categories={categories} accounts={accounts} onSuccess={fetchAll} />
+      <DeleteConfirm open={deletingOpen} onOpenChange={setDeletingOpen} title="Delete Transaction" message={`Delete transaction "${deleting?.description ?? deleting?.id}"?`} onConfirm={() => deleting && handleDelete(deleting.id)} />
 
       <AddButtons />
     </div>

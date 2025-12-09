@@ -14,6 +14,11 @@ import { EditGoalModal } from "@/components/EditGoalModal"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
 
+/**
+ * GoalsPage
+ * - Lists goals with progress bars (based on transactions).
+ * - Edit opens a modal that PATCHes goal; delete removes it via API.
+ */
 export default function GoalsPage() {
   const { goals, transactions, categories, fetchAll } = useDashboardData()
   const [editing, setEditing] = useState<any>(null)
@@ -21,6 +26,7 @@ export default function GoalsPage() {
   const [deleting, setDeleting] = useState<any>(null)
   const [deletingOpen, setDeletingOpen] = useState(false)
 
+  // sort by deadline
   const sortedGoals = goals.slice().sort((a, b) => (a.deadline ?? "").localeCompare(b.deadline ?? ""))
 
   async function handleDelete(id: number|string) {

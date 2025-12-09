@@ -2,6 +2,8 @@
 // Author: Lucas Lotze (llotze@bu.edu), 12/01/2025
 // Description: Root layout for the application.
 
+// Root layout: keeps metadata on the server and imports a small client nav component.
+// DashboardDataProvider is mounted here so pages can consume shared dashboard state.
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -23,6 +25,12 @@ export const metadata: Metadata = {
   description: "CS412 | Final Project",
 };
 
+/**
+ * RootLayout
+ * - Server-exportable metadata stays in this file.
+ * - Client-only UI (ClientNav) is imported as a client component to keep layout server-friendly.
+ * - DashboardDataProvider wraps the app so pages/components can read/write shared data.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,6 +43,7 @@ export default function RootLayout({
       >
         <DashboardDataProvider>
           <div className="min-h-screen bg-background text-foreground p-6">
+            {/* ClientNav is a client component that renders only when logged in */}
             <ClientNav />
             {children}
           </div>
