@@ -31,6 +31,7 @@ export function ClientNav() {
       <div className="flex gap-4">
         <Link href="/"><Button variant="ghost">Overview</Button></Link>
         <Link href="/accounts"><Button variant="ghost">Accounts</Button></Link>
+        <Link href="/categories"><Button variant="ghost">Categories</Button></Link>
         <Link href="/goals"><Button variant="ghost">Goals</Button></Link>
         <Link href="/transactions"><Button variant="ghost">Transactions</Button></Link>
       </div>

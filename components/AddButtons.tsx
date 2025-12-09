@@ -25,9 +25,9 @@ export function AddButtons() {
         <Button
           variant="outline"
           className="bg-primary text-primary-foreground"
-          onClick={() => setShowTransactionModal(true)}
+          onClick={() => setShowAccountModal(true)}
         >
-          Add Transaction
+          Add Account
         </Button>
         <Button
           variant="outline"
@@ -46,9 +46,9 @@ export function AddButtons() {
         <Button
           variant="outline"
           className="bg-primary text-primary-foreground"
-          onClick={() => setShowAccountModal(true)}
+          onClick={() => setShowTransactionModal(true)}
         >
-          Add Account
+          Add Transaction
         </Button>
       </div>
       <AddTransactionModal
