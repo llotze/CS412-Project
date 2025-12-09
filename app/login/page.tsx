@@ -11,12 +11,14 @@ import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
+import { useDashboardData } from "@/hooks/DashboardDataContext"
 
 export default function Login() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
+  const { fetchAll } = useDashboardData() 
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -29,6 +31,13 @@ export default function Login() {
     const data = await res.json()
     if (res.ok && data.access) {
       localStorage.setItem("access", data.access) // Save JWT token
+
+      // notify same-tab listeners that a login happened
+      window.dispatchEvent(new Event("login"))
+
+      // also refresh provider data if available
+      try { fetchAll() } catch (e) { /* ignore */ }
+
       router.push("/")
     } else {
       setError(data.detail || "Invalid username or password.")
