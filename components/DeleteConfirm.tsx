@@ -1,3 +1,7 @@
+// file: project/components/DeleteConfirm.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/09/2025
+// Description: Component for displaying delete confirmation.
+
 "use client"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"

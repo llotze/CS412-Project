@@ -1,3 +1,7 @@
+// file: project/components/EditGoalModal.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/09/2025
+// Description: Component for editing an existing goal.
+
 "use client"
 import { useEffect, useState } from "react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet"

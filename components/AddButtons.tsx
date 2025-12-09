@@ -1,3 +1,7 @@
+// file: project/components/AddButtons.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/06/2025
+// Description: Component for adding buttons to add new items.
+
 "use client"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"

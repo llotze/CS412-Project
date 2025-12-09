@@ -1,3 +1,7 @@
+// file: project/hooks/DashboardDataContext.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/06/2025
+// Description: Context provider for dashboard data.
+
 "use client"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"

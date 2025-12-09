@@ -1,3 +1,7 @@
+// file: project/app/categories/page.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/09/2025
+// Description: Screen for displaying the list of categories.
+
 "use client"
 import { useState } from "react"
 import { Card } from "@/components/ui/card"

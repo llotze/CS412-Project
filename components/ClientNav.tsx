@@ -1,3 +1,7 @@
+// file: project/components/ClientNav.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/09/2025
+// Description: Component for navigation.
+
 "use client"
 import Link from "next/link"
 import { useEffect, useState } from "react"
