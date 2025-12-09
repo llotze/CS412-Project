@@ -21,7 +21,6 @@ export function DeleteConfirm({
 }) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      {/* Center inner content by making SheetContent a flex container and constrain the inner panel width */}
       <SheetContent className="flex items-center justify-center">
         <div className="w-full max-w-md bg-transparent">
           <SheetHeader>
