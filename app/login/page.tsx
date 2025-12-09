@@ -1,3 +1,7 @@
+// file: project/app/login/page.tsx
+// Author: Lucas Lotze (llotze@bu.edu), 12/02/2025
+// Description: Screen for user login.
+
 "use client"
 
 import { useState } from "react"
