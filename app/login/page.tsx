@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { useDashboardData } from "@/hooks/DashboardDataContext"
+import { API_BASE } from "@/lib/api"
 
 /**
  * Login page component.
@@ -27,7 +28,7 @@ export default function Login() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setError("")
-    const res = await fetch("http://127.0.0.1:8000/api/token/", {
+    const res = await fetch(`${API_BASE}/api/token/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

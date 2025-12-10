@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Budgeting App — CS412 Final Project
 
-## Getting Started
+Author: Lucas Lotze  
+Date: December 2025
 
-First, run the development server:
+Overview
+--------
+A simple personal budgeting app with a Django + DRF backend and a React (Next.js) frontend.  
+You can create accounts, categories, transactions and goals, sign up / log in with JWT, and filter transactions by category.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+What’s implemented
+-----------------
+- Models: Account, Category (global), Transaction, Goal  
+- Full CRUD endpoints (create/edit/delete/list)  
+- JWT auth (SimpleJWT): register, login  
+- Server-side transactions filter: GET /project/api/transactions/?category=<id>  
+- React pages: /, /login, /register, /accounts, /categories, /goals, /transactions
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+API endpoints
+-----------------------
+- POST /project/api/register/        
+- POST /api/token/                    
+- POST /api/token/refresh/           
+- GET/POST /project/api/categories/
+- GET/PUT/DELETE /project/api/category/<id>/
+- GET/POST /project/api/accounts/
+- GET/PUT/DELETE /project/api/account/<id>/
+- GET/POST /project/api/transactions/?category=<id>
+- GET/PUT/DELETE /project/api/transaction/<id>/
+- GET/POST /project/api/goals/
+- GET/PUT/DELETE /project/api/goal/<id>/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Notes
+------------
+- Category is global (no user FK). Editing/deleting a category affects all users. If you want only admins to manage categories, change the Category detail view permission to IsAdminUser.
+- The frontend stores the JWT access token in localStorage under key `access`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contact
+-------
+Lucas Lotze — llotze@bu.edu

@@ -10,6 +10,7 @@ import { useDashboardData } from "@/hooks/DashboardDataContext"
 import { AddButtons } from "@/components/AddButtons"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
+import { API_BASE } from "@/lib/api"
 
 /**
  * AccountsPage
@@ -30,7 +31,7 @@ export default function AccountsPage() {
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access")
     if (!token) return
-    await fetch(`http://127.0.0.1:8000/project/api/account/${id}/`, {
+    await fetch(`${API_BASE}/project/api/account/${id}/`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${token}` }
     })

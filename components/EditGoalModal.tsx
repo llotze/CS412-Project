@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Category } from "../types"
+import { API_BASE } from "@/lib/api"
 
 /**
  * EditGoalModal
@@ -52,7 +53,7 @@ export function EditGoalModal({
       setLoading(false)
       return
     }
-    const res = await fetch(`http://127.0.0.1:8000/project/api/goal/${goal.id}/`, {
+    const res = await fetch(`${API_BASE}/project/api/goal/${goal.id}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

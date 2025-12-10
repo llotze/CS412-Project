@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Account, Category } from "../types"
+import { API_BASE } from "@/lib/api"
 
 type AddTransactionModalProps = {
   open: boolean
@@ -47,7 +48,7 @@ export function AddTransactionModal({
       ...form,
       date: form.date ? form.date + "T00:00:00" : "",
     }
-    const res = await fetch("http://127.0.0.1:8000/project/api/transactions/", {
+    const res = await fetch(`${API_BASE}/project/api/transactions/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

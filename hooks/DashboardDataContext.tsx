@@ -6,6 +6,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Account, Category, Goal, Transaction } from "../types"
+import { API_BASE } from "@/lib/api"
 
 type DashboardDataContextType = {
   accounts: Account[]
@@ -57,10 +58,10 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
         .catch(() => setter([]))
     }
 
-    fetchArray("http://127.0.0.1:8000/project/api/accounts/", setAccounts)
-    fetchArray("http://127.0.0.1:8000/project/api/categories/", setCategories)
-    fetchArray("http://127.0.0.1:8000/project/api/goals/", setGoals)
-    fetchArray("http://127.0.0.1:8000/project/api/transactions/?limit=5", setTransactions)
+    fetchArray(`${API_BASE}/project/api/accounts/`, setAccounts)
+    fetchArray(`${API_BASE}/project/api/categories/`, setCategories)
+    fetchArray(`${API_BASE}/project/api/goals/`, setGoals)
+    fetchArray(`${API_BASE}/project/api/transactions/?limit=5`, setTransactions)
   }
 
   // fetch transactions from backend with optional category filter
@@ -68,7 +69,7 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     const token = localStorage.getItem("access")
     if (!token) return
     const headers = { "Authorization": `Bearer ${token}` }
-    let url = "http://127.0.0.1:8000/project/api/transactions/"
+    let url = `${API_BASE}/project/api/transactions/`
     if (categoryId !== undefined && categoryId !== null && String(categoryId).length > 0) {
       url += `?category=${encodeURIComponent(String(categoryId))}`
     }

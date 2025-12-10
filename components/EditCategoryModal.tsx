@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/comp
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
+import { API_BASE } from "@/lib/api"
 
 /**
  * EditCategoryModal
@@ -44,7 +45,7 @@ export function EditCategoryModal({
       setLoading(false)
       return
     }
-    const res = await fetch(`http://127.0.0.1:8000/project/api/category/${category.id}/`, {
+    const res = await fetch(`${API_BASE}/project/api/category/${category.id}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

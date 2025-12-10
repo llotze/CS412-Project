@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { useDashboardData } from "@/hooks/DashboardDataContext"
+import { API_BASE } from "@/lib/api"
 
 /**
  * Register page
@@ -29,7 +30,7 @@ export default function RegisterPage() {
       return
     }
     setLoading(true)
-    const res = await fetch("http://127.0.0.1:8000/project/api/register/", {
+    const res = await fetch(`${API_BASE}/project/api/register/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

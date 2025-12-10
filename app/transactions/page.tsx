@@ -11,6 +11,7 @@ import { AddButtons } from "@/components/AddButtons"
 import { EditTransactionModal } from "@/components/EditTransactionModal"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
+import { API_BASE } from "@/lib/api"
 
 /**
  * TransactionsPage
@@ -41,7 +42,7 @@ export default function TransactionsPage() {
 
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access"); if (!token) return
-    await fetch(`http://127.0.0.1:8000/project/api/transaction/${id}/`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } })
+    await fetch(`${API_BASE}/project/api/transaction/${id}/`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } })
     // refresh full listing after delete
     fetchAll()
   }

@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/comp
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
+import { API_BASE } from "@/lib/api"
 
 /**
  * AddCategoryModal
@@ -31,7 +32,7 @@ export function AddCategoryModal({ open, onOpenChange, onSuccess }: {
       setLoading(false)
       return
     }
-    const res = await fetch("http://127.0.0.1:8000/project/api/categories/", {
+    const res = await fetch(`${API_BASE}/project/api/categories/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

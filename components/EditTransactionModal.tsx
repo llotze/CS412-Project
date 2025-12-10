@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Account, Category } from "../types"
+import { API_BASE } from "@/lib/api"
 
 /**
  * EditTransactionModal
@@ -62,7 +63,7 @@ export function EditTransactionModal({
       ...form,
       date: form.date ? form.date + "T00:00:00" : "",
     }
-    const res = await fetch(`http://127.0.0.1:8000/project/api/transaction/${transaction.id}/`, {
+    const res = await fetch(`${API_BASE}/project/api/transaction/${transaction.id}/`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

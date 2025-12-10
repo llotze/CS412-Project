@@ -11,6 +11,7 @@ import { AddButtons } from "@/components/AddButtons"
 import { EditCategoryModal } from "@/components/EditCategoryModal"
 import { DeleteConfirm } from "@/components/DeleteConfirm"
 import { Button } from "@/components/ui/button"
+import { API_BASE } from "@/lib/api"
 
 /**
  * CategoriesPage
@@ -26,7 +27,7 @@ export default function CategoriesPage() {
 
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access"); if (!token) return
-    await fetch(`http://127.0.0.1:8000/project/api/category/${id}/`, {
+    await fetch(`${API_BASE}/project/api/category/${id}/`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${token}` }
     })

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Alert } from "@/components/ui/alert"
 import { Category } from "../types"
+import { API_BASE } from "@/lib/api"
 
 
 /**
@@ -34,7 +35,7 @@ export function AddGoalModal({ open, onOpenChange, categories, onSuccess }: {
       setLoading(false)
       return
     }
-    const res = await fetch("http://127.0.0.1:8000/project/api/goals/", {
+    const res = await fetch(`${API_BASE}/project/api/goals/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
