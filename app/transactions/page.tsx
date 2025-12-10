@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 /**
  * TransactionsPage
  * Show recent transactions, allow edit/delete via modals.
+ * category filter 
  */
 export default function TransactionsPage() {
   const { transactions, categories, accounts, fetchAll } = useDashboardData()
@@ -22,6 +23,7 @@ export default function TransactionsPage() {
   const [editingOpen, setEditingOpen] = useState(false)
   const [deleting, setDeleting] = useState<any>(null)
   const [deletingOpen, setDeletingOpen] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<string>("")
 
   // compact account display: name + small pill with type
   function getAccountName(id: number | string) {
@@ -41,6 +43,12 @@ export default function TransactionsPage() {
     return b.date.localeCompare(a.date)
   })
 
+  // compare as strings to match select values
+  const filteredTransactions = sortedTransactions.filter(tx => {
+    if (!selectedCategory) return true
+    return String(tx.category) === selectedCategory
+  })
+
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access"); if (!token) return
     await fetch(`http://127.0.0.1:8000/project/api/transaction/${id}/`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } })
@@ -50,6 +58,25 @@ export default function TransactionsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground p-6">
       <h1 className="text-3xl font-bold mb-6">Recent Transactions</h1>
+
+      <Card className="bg-card text-card-foreground p-3 shadow-sm mb-4">
+        {/* Category filter control */}
+        <div className="flex items-center gap-3">
+          <label className="text-sm font-medium">Filter by category:</label>
+          <select
+            value={selectedCategory}
+            onChange={e => setSelectedCategory(e.target.value)}
+            className="bg-input text-foreground rounded-md border px-3 py-1"
+          >
+            <option value="">All</option>
+            {categories.map(cat => (
+              <option key={cat.id} value={String(cat.id)}>{cat.title}</option>
+            ))}
+          </select>
+          <Button variant="outline" onClick={() => { setSelectedCategory("") }}>Clear</Button>
+        </div>
+      </Card>
+
       <Card className="bg-card text-card-foreground p-3 shadow-sm">
         <Table>
           <thead>
@@ -63,10 +90,10 @@ export default function TransactionsPage() {
             </tr>
           </thead>
           <tbody>
-            {sortedTransactions.length === 0 ? (
+            {filteredTransactions.length === 0 ? (
               <tr><td colSpan={6} className="text-center py-2 text-muted-foreground">No transactions found.</td></tr>
             ) : (
-              sortedTransactions.map(tx => (
+              filteredTransactions.map(tx => (
                 <tr key={tx.id} className="border-b last:border-b-0">
                   <td className="py-1 px-2 text-sm">{tx.date ? tx.date.split("T")[0] : ""}</td>
                   <td className="py-1 px-2 text-sm">{getCategoryTitle(categories, tx.category)}</td>
