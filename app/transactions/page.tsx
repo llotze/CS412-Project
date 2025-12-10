@@ -2,7 +2,7 @@
 // Author: Lucas Lotze (llotze@bu.edu), 12/04/2025
 // Description: Screen for displaying the list of transactions.
 "use client"
-import { useState } from "react"
+import { useEffect, useState } from "react"    // added useEffect
 import { Card } from "@/components/ui/card"
 import { Table } from "@/components/ui/table"
 import { useDashboardData } from "@/hooks/DashboardDataContext"
@@ -18,40 +18,31 @@ import { Button } from "@/components/ui/button"
  * category filter 
  */
 export default function TransactionsPage() {
-  const { transactions, categories, accounts, fetchAll } = useDashboardData()
+  const { transactions, categories, accounts, fetchAll, fetchTransactions } = useDashboardData()
   const [editing, setEditing] = useState<any>(null)
   const [editingOpen, setEditingOpen] = useState(false)
   const [deleting, setDeleting] = useState<any>(null)
   const [deletingOpen, setDeletingOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string>("")
 
-  // compact account display: name + small pill with type
-  function getAccountName(id: number | string) {
-    const acc = accounts.find(a => a.id === id)
-    if (!acc) return id
-    return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium leading-none">{acc.name}</span>
-        <span className="text-xs text-muted-foreground bg-muted/40 px-2 py-0.5 rounded-full leading-none">{acc.type}</span>
-      </div>
-    )
-  }
+  // request server-side filtered transactions when category changes 
+  useEffect(() => {
+    // pass empty string/null to fetch all
+    const cat = selectedCategory || undefined
+    fetchTransactions ? fetchTransactions(cat) : fetchAll()
+  }, [selectedCategory, fetchTransactions, fetchAll])
 
-  const sortedTransactions = transactions.slice().sort((a, b) => {
-    if (!a.date) return 1
-    if (!b.date) return -1
+  // keep sorting in UI consistent
+  const sortedTransactions = (transactions || []).slice().sort((a, b) => {
+    if (!a?.date) return 1
+    if (!b?.date) return -1
     return b.date.localeCompare(a.date)
-  })
-
-  // compare as strings to match select values
-  const filteredTransactions = sortedTransactions.filter(tx => {
-    if (!selectedCategory) return true
-    return String(tx.category) === selectedCategory
   })
 
   async function handleDelete(id: number|string) {
     const token = localStorage.getItem("access"); if (!token) return
     await fetch(`http://127.0.0.1:8000/project/api/transaction/${id}/`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } })
+    // refresh full listing after delete
     fetchAll()
   }
 
@@ -90,14 +81,14 @@ export default function TransactionsPage() {
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.length === 0 ? (
+            {sortedTransactions.length === 0 ? (
               <tr><td colSpan={6} className="text-center py-2 text-muted-foreground">No transactions found.</td></tr>
             ) : (
-              filteredTransactions.map(tx => (
+              sortedTransactions.map(tx => (
                 <tr key={tx.id} className="border-b last:border-b-0">
                   <td className="py-1 px-2 text-sm">{tx.date ? tx.date.split("T")[0] : ""}</td>
                   <td className="py-1 px-2 text-sm">{getCategoryTitle(categories, tx.category)}</td>
-                  <td className="py-1 px-2 text-sm">{getAccountName(tx.account)}</td>
+                  <td className="py-1 px-2 text-sm">{accounts.find(a=>a.id===tx.account)?.name ?? tx.account}</td>
                   <td className="py-1 px-2 text-sm">${parseFloat(tx.amount).toFixed(2)}</td>
                   <td className="py-1 px-2 text-sm">{tx.description}</td>
                   <td className="py-1 px-2 text-sm text-right">

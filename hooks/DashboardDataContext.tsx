@@ -3,7 +3,7 @@
 // Description: Context provider for dashboard data (accounts, categories, goals, transactions).
 
 "use client"
-import { createContext, useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Account, Category, Goal, Transaction } from "../types"
 
@@ -27,7 +27,7 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
   const [accounts, setAccounts] = useState<Account[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [goals, setGoals] = useState<Goal[]>([])
-  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [transactions, setTransactions] = useState<any[]>([])
   const router = useRouter()
 
   /**
@@ -35,16 +35,13 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
    * Fetch arrays from API endpoints and update local state.
    * If no token or 401 returned, redirect to login.
    */
-  function fetchAll() {
+  async function fetchAll() {
     const token = localStorage.getItem("access")
     if (!token) {
       router.push("/login")
       return
     }
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
-    }
+    const headers = { "Authorization": `Bearer ${token}` }
 
     function fetchArray(url: string, setter: (data: any[]) => void) {
       fetch(url, { headers })
@@ -64,6 +61,26 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     fetchArray("http://127.0.0.1:8000/project/api/categories/", setCategories)
     fetchArray("http://127.0.0.1:8000/project/api/goals/", setGoals)
     fetchArray("http://127.0.0.1:8000/project/api/transactions/?limit=5", setTransactions)
+  }
+
+  // fetch transactions from backend with optional category filter
+  async function fetchTransactions(categoryId?: string | number | null) {
+    const token = localStorage.getItem("access")
+    if (!token) return
+    const headers = { "Authorization": `Bearer ${token}` }
+    let url = "http://127.0.0.1:8000/project/api/transactions/"
+    if (categoryId !== undefined && categoryId !== null && String(categoryId).length > 0) {
+      url += `?category=${encodeURIComponent(String(categoryId))}`
+    }
+    const res = await fetch(url, { headers })
+    if (!res.ok) {
+      return
+    }
+    const data = await res.json().catch(() => null)
+    if (!data) return
+    // normalize paginated and non-paginated responses to aray
+    const txs = Array.isArray(data) ? data : (data.results ?? data)
+    setTransactions(txs)
   }
 
   useEffect(() => {
@@ -86,10 +103,17 @@ export function DashboardDataProvider({ children }: { children: React.ReactNode 
     // eslint-disable-next-line
   }, [])
 
+  const value = {
+    accounts,
+    categories,
+    goals,
+    transactions,
+    fetchAll,
+    fetchTransactions,
+  }
+
   return (
-    <DashboardDataContext.Provider value={{
-      accounts, categories, goals, transactions, fetchAll
-    }}>
+    <DashboardDataContext.Provider value={value}>
       {children}
     </DashboardDataContext.Provider>
   )
